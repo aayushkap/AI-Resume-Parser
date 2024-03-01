@@ -1,0 +1,13 @@
+# Ignore .ini files
+*.ini
+
+# Ignore .env files
+*.env
+
+# Ignore Python virtual environment directories
+venv/
+
+# Ignore Resumes Folder
+Resumes/
+
+.cache_ggshield
