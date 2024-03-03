@@ -5,16 +5,16 @@ Resume ingestion flow is described here.
 import os
 from langchain.docstore.document import Document
 
-from embedding_utils import add_to_db
-from loaders import PDF_loader, DOCX_loader
+from .embedding_utils import add_to_db
+from .loaders import PDF_loader, DOCX_loader
 
 
 def ingest_resumes():
     # List of documents to be added to the database
     documents = []
-    for filename in os.listdir("./data/files/resumes"):
+    for filename in os.listdir("./data/resumes"):
 
-        file_path = os.path.join("./data/files/resumes", filename)
+        file_path = os.path.join("./data/resumes", filename)
 
         if filename.endswith(".docx"):
             resume = DOCX_loader(file_path)

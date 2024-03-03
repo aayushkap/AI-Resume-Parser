@@ -8,9 +8,6 @@ Entry point for the parser. Always run from here, so python understands project 
 
 """
 
+from vdb.ingest import ingest_resumes
 
-def extract_and_ingest(files: list[str]) -> None:
-    # ? Save files in directory
-
-    # ? Run extract info and ingestion process
-    pass
+ingest_resumes()

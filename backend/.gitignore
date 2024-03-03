@@ -7,8 +7,8 @@
 # Ignore Python virtual environment directories
 venv/
 
-# Ignore Resumes Folder
-Resumes/
+# Ignore resumes
+backend/data/resumes/*
 
 .cache_ggshield
 

@@ -1,9 +1,4 @@
 from langchain_community.document_loaders import PyPDFLoader
-import os
-from langchain.docstore.document import Document
-
-from parser.vdb.embedding_utils import add_to_db
-from loaders import PDF_loader
 
 
 def PDF_loader(file_path):
