@@ -1,20 +1,12 @@
-import sys
-import openai
+"""
 
-sys.path.append("..")
-from Services.Faiss.faissStuff import testEmbeddings
-import os
+"""
+
+from faiss_stuff import testEmbeddings
 import pandas as pd
 
 
 def handleJobDescription(query):
-
-    prompt = f"""Given is the summary of a persons resume. Would this person be qualified for a job with this job description: '{query}' ? 
-    All job requirements *must* be met by the summary of the persons resume.
-    If any criteria within the job description are not met by the person, return No. 
-    If all criteria are met, return Yes.
-    Return only Yes or No.
-    """
 
     # ? Load the dataframe with extracted information
     df = pd.read_pickle("./resumeInformation.pkl")

@@ -11,3 +11,5 @@ venv/
 Resumes/
 
 .cache_ggshield
+
+__pycache__
