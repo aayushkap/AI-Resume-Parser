@@ -1,40 +1,75 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
-import os
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+
+from ..job_description import handle_user_query
+from ..config import host, port, reload
+from ..ingestion.main import save_and_ingest_file, get_all_resumes, reset_parser_data
 
 app = FastAPI()
 
-UPLOAD_DIRECTORY = "uploads"
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "*"
+    ],  # This allows all origins, you can specify specific origins instead
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 
-@app.get("/health")
-async def health_check():
-    return JSONResponse(content={"message": "Health Check Successful"}, status_code=200)
+def start():
+    uvicorn.run(
+        f"{__name__}:app",
+        host=host,
+        port=port,
+        reload=reload,
+    )
+
+
+@app.post("/")
+def main():
+    return {"message": "Hello World"}
 
 
 @app.post("/upload_files")
 async def upload_files(files: list[UploadFile] = File(...)):
-    files_to_handle = []
     try:
-        # Create the upload directory if it doesn't exist
-        if not os.path.exists(UPLOAD_DIRECTORY):
-            os.makedirs(UPLOAD_DIRECTORY)
+        files_ingested = []
 
-        # Process each uploaded file
         for uploaded_file in files:
             contents = await uploaded_file.read()
-            file_path = os.path.join(UPLOAD_DIRECTORY, uploaded_file.filename)
 
-            # Save the file to disk
-            with open(file_path, "wb") as file_object:
-                file_object.write(contents)
+            success = save_and_ingest_file(contents, uploaded_file.filename)
 
-            print(f"Uploaded file saved as: {file_path}")
+            if success:
+                files_ingested.append(uploaded_file.filename)
+            else:
+                print(f"Unable to Ingest {uploaded_file.filename}")
 
         return JSONResponse(
-            content={"message": "Files uploaded successfully"}, status_code=200
+            content={"message": f"Files {files_ingested} ingested successfully"},
+            status_code=200,
         )
     except Exception as e:
         return JSONResponse(
             content={"message": f"Error uploading files: {str(e)}"}, status_code=500
         )
+
+
+@app.get("/get_resumes")
+async def get_resume():
+    return get_all_resumes()
+
+
+@app.get("/reset")
+async def reset():
+    return reset_parser_data()
+
+
+@app.post("/query_resumes")
+async def query_resumes(query: str):
+    handle_user_query(query)
+    print("query: ", query)

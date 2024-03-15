@@ -8,7 +8,7 @@
 venv/
 
 # Ignore resumes
-backend/data/resumes/*
+data/resumes/*
 
 .cache_ggshield
 

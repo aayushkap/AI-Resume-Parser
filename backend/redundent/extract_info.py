@@ -3,7 +3,7 @@ Extract Information form a Resume, store in CSV and VDB.
 """
 
 import warnings
-import pandas as pd
+import pandas as pdd
 import os
 
 from services import api_call

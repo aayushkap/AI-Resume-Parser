@@ -2,11 +2,12 @@
 Services common to all files
 """
 
-from langchain_community.llms import OpenAI
+import time
+
 from langchain_openai import AzureChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from config import azure_api_key, azure_endpoint
+from .config import azure_api_key, azure_endpoint
 
 
 def api_call(system_message, human_message):
@@ -24,6 +25,8 @@ def api_call(system_message, human_message):
         ]
 
         res = llm(messages=msg)
+        time.sleep(1)
+
         return res.content
 
     except Exception as e:
